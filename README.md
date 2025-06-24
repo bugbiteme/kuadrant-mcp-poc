@@ -12,43 +12,35 @@ This POC used the [everything](https://github.com/modelcontextprotocol/servers/t
 ### Set the environment variables
 
 ```sh
-export KUADRANT_ZONE_ROOT_DOMAIN=example.com # Root domain associated with the Zone ID above
 export QUAY_USERNAME=xxxx # Quay username
 export KUADRANT_AWS_ACCESS_KEY_ID=xxxx # AWS Key ID with access to manage the DNS Zone ID below
 export KUADRANT_AWS_SECRET_ACCESS_KEY=xxxx # AWS Secret Access Key with access to manage the DNS Zone ID below
 ```
 
 ## Installation
+1. Update the `mcp-server/mcp-server-everything.yaml` file with your root domain.
 
-1. Build you MCP Server image.
-   ```sh
-   docker build -t quay.io/${QUAY_USERNAME}/mcp-server-everything https://github.com/modelcontextprotocol/servers.git\#main -f src/everything/Dockerfile
-   ```
-2. Push the image to your container registry.
+```yaml
 
-```sh
-   docker push quay.io/${QUAY_USERNAME}/mcp-server-everything
-```
-
-3. Install the MCP Server in your K8s cluster.
+1. Install the MCP Server in your K8s cluster.
 
 ```sh
    kubectl apply -f mcp-server/mcp-server-everything.yaml
 ```
 
-4. Ensure the MCP everything Server pod is running.
+1. Ensure the MCP everything Server pod is running.
 
 ```sh
    kubectl get pods -n mcp-server
 ```
 
-5. Create the gateway namespace:
+1. Create the gateway namespace:
 
 ```sh
     kubectl create ns mcp-gateway
 ```
 
-5. Create the secret credentials in the same namespace as the Gateway - these will be used to configure DNS:
+1. Create the secret credentials in the same namespace as the Gateway - these will be used to configure DNS:
 
 ```sh
    kubectl -n mcp-gateway create secret generic aws-credentials \
@@ -57,7 +49,7 @@ export KUADRANT_AWS_SECRET_ACCESS_KEY=xxxx # AWS Secret Access Key with access t
    --from-literal=AWS_SECRET_ACCESS_KEY=$KUADRANT_AWS_SECRET_ACCESS_KEY
 ```
 
-6. Create the secret credentials in the cert-manager namespace:
+1. Create the secret credentials in the cert-manager namespace:
 
 ```sh
 
@@ -67,13 +59,13 @@ export KUADRANT_AWS_SECRET_ACCESS_KEY=xxxx # AWS Secret Access Key with access t
    --from-literal=AWS_SECRET_ACCESS_KEY=$KUADRANT_AWS_SECRET_ACCESS_KEY
 ```
 
-7. Create the Kuadrant Gateway:
+1. Create the Kuadrant Gateway NOTE Update the `kuadrant/gateway.yaml` file with your root domain.
 
 ```sh
     kubectl apply -f kuadrant/gateway.yaml
 ```
 
-8. Create the Lets encrypt Cluster issuer and TlS Policy:
+1. Create the Lets encrypt Cluster issuer and TlS Policy:
 
 ```sh
   kubectl apply -f kuadrant/tls.yaml
@@ -81,16 +73,16 @@ export KUADRANT_AWS_SECRET_ACCESS_KEY=xxxx # AWS Secret Access Key with access t
 
     **Note**: The cert can't be self signed. MCP clients dont accept self signed certs yet.
 
-9. Create the DNSPolicy:
+1. Create the DNSPolicy:
 
 ```sh
    kubectl apply -f kuadrant/dns.yaml
 ```
 
-10. After a minute, Test that the MCP server is responding
+1. After a minute, Test that the MCP server is responding
 
 ```sh
-curl -v -X POST "https://api.${KUADRANT_ZONE_ROOT_DOMAIN}/mcp" \
+curl -v -X POST "https://api.KUADRANT_ZONE_ROOT_DOMAIN_GOES_HERE/mcp" \
       -H "Content-Type: application/json" \
       -H "Accept: application/json, text/event-stream" \
       -d '{
@@ -112,13 +104,13 @@ curl -v -X POST "https://api.${KUADRANT_ZONE_ROOT_DOMAIN}/mcp" \
           }'
 ```
 
-11. Create the Rate limit policy:
+1. Create the Rate limit policy:
 
 ```sh
     kubectl apply -f kuadrant/rlp.yaml
 ```
 
-12. Create the Auth policy and the API Key secrets:
+1. Create the Auth policy and the API Key secrets:
 
 ```sh
    kubectl apply -f kuadrant/auth.yaml
