@@ -31,7 +31,7 @@ apiVersion: kuadrant.io/v1
 kind: AuthPolicy
 metadata:
   name: mcp-server-everything-auth
-  namespace: mcp-gateway
+  namespace: mcp-server
 spec:
   targetRef:
     group: gateway.networking.k8s.io
