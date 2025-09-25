@@ -82,9 +82,10 @@ export KUADRANT_AWS_SECRET_ACCESS_KEY=xxxx # AWS Secret Access Key with access t
 1. After a minute, Test that the MCP server is responding
 
 ```sh
-curl -v -X POST "https://api.KUADRANT_ZONE_ROOT_DOMAIN_GOES_HERE/mcp" \
+curl -v -X POST "https://api.globex.sandbox2765.opentlc.com/mcp" \
       -H "Content-Type: application/json" \
       -H "Accept: application/json, text/event-stream" \
+      -H "Authorization: APIKEY IAMALICE" \
       -d '{
             "jsonrpc": "2.0",
             "method": "initialize",
@@ -104,6 +105,40 @@ curl -v -X POST "https://api.KUADRANT_ZONE_ROOT_DOMAIN_GOES_HERE/mcp" \
           }'
 ```
 
+```sh
+curl -v -X POST "https://api.globex.sandbox2765.opentlc.com/mcp" \
+      -H "Content-Type: application/json" \
+      -H "Accept: application/json, text/event-stream" \
+      -H "mcp-session-id: 79e96aba-eee9-4228-9678-87ef1de11c10" \
+      -H "Authorization: APIKEY IAMALICE" \
+      -d '{"jsonrpc":"2.0","method":"initialized","params":{}}'
+```
+
+```sh
+curl -v -X POST "https://api.globex.sandbox2765.opentlc.com/mcp" \
+      -H "Content-Type: application/json" \
+      -H "Accept: application/json, text/event-stream" \
+      -H "mcp-session-id: 79e96aba-eee9-4228-9678-87ef1de11c10" \
+      -H "Authorization: APIKEY IAMALICE" \
+      -d '{
+            "jsonrpc":"2.0",
+            "id": 2,
+            "method":"tools/list"
+          }'
+```
+```sh
+-d '{
+    "jsonrpc":"2.0","id":10,"method":"tools/call",
+    "params":{"name":"echo","arguments":{"message":"hello, globex"}}
+  }' 
+```
+
+```sh
+-d '{
+    "jsonrpc":"2.0","id":11,"method":"tools/call",
+    "params":{"name":"add","arguments":{"a":21,"b":21}}
+  }'
+```
 1. Create the Rate limit policy:
 
 ```sh
@@ -127,7 +162,7 @@ In this example we are using Vscode Co pilot as our MCP client as it has capabil
     "servers": {
       "my-mcp-server": {
         "type": "http",
-        "url": "https://KUADRANT_ZONE_ROOT_DOMAIN_GOES_HERE/mcp",
+        "url": "https://api.globex.sandbox2765.opentlc.com/mcp",
         "headers": {
           "Authorization": "APIKEY IAMALICE"
         }

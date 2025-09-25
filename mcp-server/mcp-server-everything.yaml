@@ -53,7 +53,7 @@ spec:
     - name: mcp-server-everything
       namespace: mcp-gateway
   hostnames:
-    - api.<KUADRANT_ZONE_ROOT_DOMAIN_GOES_HERE>
+    - api.globex.sandbox2765.opentlc.com
   rules:
     - matches:
         - method: POST

@@ -1,0 +1,15 @@
+apiVersion: kuadrant.io/v1
+kind: RateLimitPolicy
+metadata:
+  name: mcp-server-http-route-rlp 
+  namespace: mcp-server
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: mcp-server-everything
+  limits:
+    "per-user":
+      rates:
+        - limit: 200
+          window: 10s

@@ -11,7 +11,7 @@ spec:
     - allowedRoutes:
         namespaces:
           from: All 
-      hostname: "api.<KUADRANT_ZONE_ROOT_DOMAIN_GOES_HERE>"
+      hostname: "api.globex.sandbox2765.opentlc.com"
       name: api
       port: 443
       protocol: HTTPS
